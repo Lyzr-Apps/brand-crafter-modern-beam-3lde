@@ -31,6 +31,12 @@
       "nodeCategory": "agent"
     },
     {
+      "id": "analysis_agent",
+      "type": "Agent",
+      "label": "Competitor Analysis & Response Agent",
+      "nodeCategory": "agent"
+    },
+    {
       "id": "output_node",
       "type": "Output",
       "label": "Generated Content",
@@ -43,6 +49,8 @@
     { "source": "manager_agent", "target": "writer_agent" },
     { "source": "manager_agent", "target": "output_node" },
     { "source": "input_node", "target": "refinement_agent" },
-    { "source": "refinement_agent", "target": "output_node" }
+    { "source": "refinement_agent", "target": "output_node" },
+    { "source": "input_node", "target": "analysis_agent" },
+    { "source": "analysis_agent", "target": "output_node" }
   ]
 }

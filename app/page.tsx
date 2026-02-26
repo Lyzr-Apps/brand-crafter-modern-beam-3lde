@@ -29,6 +29,13 @@ import {
   RiMenuLine,
   RiStarLine,
   RiRefreshLine,
+  RiShieldLine,
+  RiSwordLine,
+  RiEyeLine,
+  RiAlarmWarningLine,
+  RiCheckboxCircleLine,
+  RiListOrdered,
+  RiInformationLine,
 } from 'react-icons/ri'
 import { FiTwitter } from 'react-icons/fi'
 import { HiOutlineSpeakerphone } from 'react-icons/hi'
@@ -36,6 +43,7 @@ import { HiOutlineSpeakerphone } from 'react-icons/hi'
 // --- Constants ---
 const MANAGER_AGENT_ID = '699ffd466a4eb8f58312ba37'
 const REFINEMENT_AGENT_ID = '699ffd466a4eb8f58312ba39'
+const ANALYSIS_AGENT_ID = '69a05fcd54d994465264f055'
 const HISTORY_KEY = 'content_studio_history'
 const MAX_HISTORY = 50
 
@@ -73,6 +81,30 @@ interface RefinementResponse {
   suggestions?: string[]
 }
 
+interface AnalysisResponse {
+  competitor_summary?: string
+  key_arguments?: string[]
+  factual_issues?: string[]
+  rhetorical_strategies?: string[]
+  weaknesses?: string[]
+  valid_points?: string[]
+  threat_level?: string
+  recommended_response_type?: string
+  response_title?: string
+  response_content?: string
+  strategic_talking_points?: string[]
+  seo_keywords?: string[]
+  tone_guidance?: string
+}
+
+interface AnalysisFormData {
+  competitorContent: string
+  competitorSource: string
+  yourPosition: string
+  industry: string
+  responseGoal: string
+}
+
 interface HistoryItem {
   id: string
   contentType: string
@@ -98,10 +130,18 @@ const CONTENT_TYPES = [
   { id: 'ad_copy', label: 'Ad Copy', icon: RiMegaphoneLine },
   { id: 'video_script', label: 'Video Script', icon: RiVideoLine },
   { id: 'case_study', label: 'Case Study', icon: RiFileTextLine },
+  { id: 'competitor_analysis', label: 'Critic Response', icon: RiShieldLine },
 ] as const
 
 const TONE_OPTIONS = ['Professional', 'Casual', 'Persuasive', 'Educational', 'Witty']
 const PLATFORM_OPTIONS = ['Twitter/X', 'LinkedIn', 'Instagram', 'Facebook']
+const RESPONSE_GOAL_OPTIONS = [
+  'Counter Narrative',
+  'Thought Leadership Response',
+  'Factual Rebuttal',
+  'Strategic Positioning',
+  'No Direct Response (Analysis Only)',
+]
 
 // --- Sample Data ---
 const SAMPLE_FORM: ContentFormData = {
@@ -155,6 +195,60 @@ const SAMPLE_REFINEMENT_RESPONSE: RefinementResponse = {
     'Include specific tool recommendations for different budget levels',
     'Add a downloadable checklist as a lead magnet',
   ],
+}
+
+const SAMPLE_ANALYSIS_FORM: AnalysisFormData = {
+  competitorContent: 'AI-generated content is killing authentic brand voices. Companies relying on AI tools like ContentBot and AutoWriter are producing generic, soulless content that readers can spot from a mile away. Our analysis of 500 AI-written blog posts found that 73% scored below average on engagement metrics. The rush to automate content creation is a race to the bottom that sacrifices quality for quantity. Smart brands are doubling down on human writers who understand nuance, emotion, and real storytelling.',
+  competitorSource: 'MarketingTruth Blog by Alex Rivera',
+  yourPosition: 'We believe AI augments human creativity rather than replacing it. Our platform combines AI efficiency with human editorial oversight to produce high-quality, on-brand content at scale.',
+  industry: 'Content Marketing / MarTech',
+  responseGoal: 'Counter Narrative',
+}
+
+const SAMPLE_ANALYSIS_RESPONSE: AnalysisResponse = {
+  competitor_summary: 'Alex Rivera from MarketingTruth Blog argues that AI content tools produce generic, low-quality output that damages brand authenticity. They cite a study of 500 AI-written posts showing below-average engagement and advocate for purely human content creation.',
+  key_arguments: [
+    'AI-generated content lacks authentic brand voice',
+    '73% of AI-written posts scored below average on engagement',
+    'AI content automation is a race to the bottom',
+    'Human writers are superior for nuance, emotion, and storytelling',
+  ],
+  factual_issues: [
+    'The "500 blog post study" lacks methodology details -- sample selection, engagement metric definitions, and control groups are not disclosed',
+    'No distinction is made between AI-only content and AI-assisted content with human editing',
+    'The claim implies all AI tools produce identical output, ignoring significant quality differences between platforms',
+    'Engagement metrics are influenced by many factors beyond content quality (SEO, distribution, audience targeting)',
+  ],
+  rhetorical_strategies: [
+    'Cherry-picked statistic (73%) presented without full context or methodology',
+    'False binary: frames the choice as "AI vs. human" rather than acknowledging hybrid approaches',
+    'Emotional language ("soulless", "race to the bottom") to provoke reaction',
+    'Appeal to tradition -- positions human writing as inherently superior without evidence',
+  ],
+  weaknesses: [
+    'Ignores the rapidly evolving quality of AI content tools with human-in-the-loop workflows',
+    'Does not address the scalability challenge that drives AI adoption',
+    'Fails to acknowledge that many "human-only" teams already use AI for research and ideation',
+    'The argument conflates unedited AI output with professionally managed AI-assisted workflows',
+  ],
+  valid_points: [
+    'Brand voice consistency is a legitimate concern when using AI without proper guardrails',
+    'Over-reliance on AI without human oversight can reduce content quality',
+    'Storytelling and emotional connection remain areas where human writers excel',
+  ],
+  threat_level: 'Medium',
+  recommended_response_type: 'Thought Leadership Blog Post',
+  response_title: 'The False Choice: Why the AI vs. Human Content Debate Misses the Point',
+  response_content: '## The Real Question Isn\'t AI vs. Human -- It\'s How You Use Both\n\nA recent piece from MarketingTruth Blog raises important concerns about AI in content creation. While some points deserve attention, the core argument presents a false choice that doesn\'t reflect how leading content teams actually operate.\n\n### The Data Deserves Context\n\nThe claim that 73% of AI-written content underperforms is worth examining -- but context matters. Unedited, unguided AI output predictably falls short. That\'s not a flaw in the technology; it\'s a flaw in the process. The same could be said of first drafts from any source.\n\nWhen organizations implement AI with proper editorial workflows -- human oversight, brand voice guidelines, strategic direction -- the results tell a different story. Our clients consistently report 3x content output with maintained or improved quality scores.\n\n### The Hybrid Approach Wins\n\nThe most successful content teams in 2025 aren\'t choosing between AI and human writers. They\'re combining both:\n\n- **AI handles** research, data analysis, first drafts, and optimization\n- **Humans provide** strategic direction, brand voice, emotional nuance, and final editorial judgment\n\nThis isn\'t a compromise -- it\'s an evolution. Just as designers didn\'t disappear when Photoshop arrived, writers aren\'t going away because of AI.\n\n### Quality Is a Process Issue, Not a Technology Issue\n\nBlaming AI for poor content quality is like blaming a kitchen for bad cooking. The tool matters less than the process, the expertise, and the standards applied to the output.\n\nOrganizations seeing poor results from AI content typically share common issues: no brand guidelines configured, no human review step, no strategic content framework. Fix the process, and the quality follows.\n\n### Moving Forward\n\nWe agree that authenticity matters. We agree that brand voice is non-negotiable. Where we differ is in believing that AI, properly implemented, strengthens rather than weakens these outcomes. The future belongs to teams that master the partnership between human creativity and AI capability.',
+  strategic_talking_points: [
+    'AI vs. human is a false binary -- the real advantage is in hybrid workflows',
+    'Quality is a process issue, not a technology limitation',
+    'Leading content teams already use AI for research and ideation',
+    'Properly configured AI with human oversight improves both quality and output',
+    'The debate should focus on implementation best practices, not technology rejection',
+  ],
+  seo_keywords: ['AI content quality', 'AI vs human writers', 'content marketing AI', 'AI content strategy', 'hybrid content creation', 'AI-assisted writing'],
+  tone_guidance: 'Measured and authoritative. Acknowledge valid concerns without being defensive. Let data and logic carry the argument. Position as the experienced, balanced voice in the conversation.',
 }
 
 // --- ErrorBoundary ---
@@ -495,6 +589,420 @@ function InputForm({
           'Generate Content'
         )}
       </button>
+    </div>
+  )
+}
+
+// --- Competitor Analysis Input ---
+function CompetitorAnalysisInput({
+  formData,
+  setFormData,
+  isAnalyzing,
+  onAnalyze,
+  error,
+}: {
+  formData: AnalysisFormData
+  setFormData: React.Dispatch<React.SetStateAction<AnalysisFormData>>
+  isAnalyzing: boolean
+  onAnalyze: () => void
+  error: string
+}) {
+  return (
+    <div className="space-y-5">
+      <div>
+        <label className="block text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5">
+          Competitor / Critic Content
+        </label>
+        <textarea
+          placeholder="Paste the competitor's blog post, article, or criticism here..."
+          value={formData.competitorContent}
+          onChange={(e) => setFormData((prev) => ({ ...prev, competitorContent: e.target.value }))}
+          rows={8}
+          className="w-full px-3 py-2.5 text-sm bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground resize-none transition-colors"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5">
+          Source / Author
+        </label>
+        <input
+          type="text"
+          placeholder="e.g., MarketingTruth Blog by Alex Rivera"
+          value={formData.competitorSource}
+          onChange={(e) => setFormData((prev) => ({ ...prev, competitorSource: e.target.value }))}
+          className="w-full px-3 py-2.5 text-sm bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition-colors"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5">
+          Your Brand's Position
+        </label>
+        <textarea
+          placeholder="Briefly describe your stance or counter-position..."
+          value={formData.yourPosition}
+          onChange={(e) => setFormData((prev) => ({ ...prev, yourPosition: e.target.value }))}
+          rows={3}
+          className="w-full px-3 py-2.5 text-sm bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground resize-none transition-colors"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5">
+          Industry
+        </label>
+        <input
+          type="text"
+          placeholder="e.g., Content Marketing / MarTech"
+          value={formData.industry}
+          onChange={(e) => setFormData((prev) => ({ ...prev, industry: e.target.value }))}
+          className="w-full px-3 py-2.5 text-sm bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition-colors"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5">
+          Response Goal
+        </label>
+        <select
+          value={formData.responseGoal}
+          onChange={(e) => setFormData((prev) => ({ ...prev, responseGoal: e.target.value }))}
+          className="w-full px-3 py-2.5 text-sm bg-card border border-border text-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition-colors"
+        >
+          <option value="">Select response goal...</option>
+          {RESPONSE_GOAL_OPTIONS.map((g) => (
+            <option key={g} value={g}>
+              {g}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {error && (
+        <div className="flex items-start gap-2 p-3 border border-destructive bg-destructive/5 text-sm text-destructive">
+          <RiErrorWarningLine className="w-4 h-4 mt-0.5 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      <button
+        onClick={onAnalyze}
+        disabled={isAnalyzing || !formData.competitorContent.trim()}
+        className="w-full py-3 bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      >
+        {isAnalyzing ? (
+          <>
+            <RiLoader4Line className="w-4 h-4 animate-spin" />
+            Analyzing competitor content...
+          </>
+        ) : (
+          <>
+            <RiShieldLine className="w-4 h-4" />
+            Analyze & Respond
+          </>
+        )}
+      </button>
+    </div>
+  )
+}
+
+// --- Threat Level Badge ---
+function ThreatLevelBadge({ level }: { level: string }) {
+  const normalized = (level ?? '').toLowerCase()
+  let bgColor = 'bg-muted'
+  let textColor = 'text-muted-foreground'
+
+  if (normalized === 'low') {
+    bgColor = 'bg-green-100'
+    textColor = 'text-green-800'
+  } else if (normalized === 'medium') {
+    bgColor = 'bg-amber-100'
+    textColor = 'text-amber-800'
+  } else if (normalized === 'high') {
+    bgColor = 'bg-orange-100'
+    textColor = 'text-orange-800'
+  } else if (normalized === 'critical') {
+    bgColor = 'bg-red-100'
+    textColor = 'text-red-800'
+  }
+
+  return (
+    <span className={`inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider ${bgColor} ${textColor}`}>
+      {level || 'Unknown'}
+    </span>
+  )
+}
+
+// --- Analysis Output Panel ---
+function AnalysisOutputPanel({
+  analysis,
+  onCopy,
+  onExport,
+  onCopyTalkingPoints,
+  copySuccess,
+}: {
+  analysis: AnalysisResponse
+  onCopy: () => void
+  onExport: () => void
+  onCopyTalkingPoints: () => void
+  copySuccess: boolean
+}) {
+  const keyArguments = Array.isArray(analysis?.key_arguments) ? analysis.key_arguments : []
+  const factualIssues = Array.isArray(analysis?.factual_issues) ? analysis.factual_issues : []
+  const rhetoricalStrategies = Array.isArray(analysis?.rhetorical_strategies) ? analysis.rhetorical_strategies : []
+  const weaknesses = Array.isArray(analysis?.weaknesses) ? analysis.weaknesses : []
+  const validPoints = Array.isArray(analysis?.valid_points) ? analysis.valid_points : []
+  const talkingPoints = Array.isArray(analysis?.strategic_talking_points) ? analysis.strategic_talking_points : []
+  const seoKeywords = Array.isArray(analysis?.seo_keywords) ? analysis.seo_keywords : []
+
+  return (
+    <div className="flex-1 overflow-y-auto">
+      {/* Action Bar */}
+      <div className="sticky top-0 z-10 bg-card border-b border-border px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Competitor Analysis
+          </span>
+          {analysis?.threat_level && (
+            <span className="border-l border-border pl-3">
+              <ThreatLevelBadge level={analysis.threat_level} />
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onCopyTalkingPoints}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-border hover:bg-secondary transition-colors"
+          >
+            <RiListOrdered className="w-3.5 h-3.5" />
+            Copy Points
+          </button>
+          <button
+            onClick={onCopy}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-border hover:bg-secondary transition-colors"
+          >
+            {copySuccess ? (
+              <>
+                <RiCheckLine className="w-3.5 h-3.5 text-green-600" />
+                <span className="text-green-600">Copied!</span>
+              </>
+            ) : (
+              <>
+                <RiFileCopyLine className="w-3.5 h-3.5" />
+                Copy Response
+              </>
+            )}
+          </button>
+          <button
+            onClick={onExport}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-border hover:bg-secondary transition-colors"
+          >
+            <RiDownloadLine className="w-3.5 h-3.5" />
+            Export
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="px-6 py-8 max-w-3xl mx-auto">
+        {/* Intelligence Summary */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <RiShieldLine className="w-6 h-6 text-foreground" />
+            <h2 className="font-serif text-xl font-bold text-foreground">Intelligence Briefing</h2>
+          </div>
+
+          {/* Threat Level + Response Type */}
+          <div className="flex flex-wrap gap-3 mb-4">
+            {analysis?.threat_level && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Threat:</span>
+                <ThreatLevelBadge level={analysis.threat_level} />
+              </div>
+            )}
+            {analysis?.recommended_response_type && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Recommended:</span>
+                <span className="inline-block px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground border border-border">
+                  {analysis.recommended_response_type}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Competitor Summary */}
+          {analysis?.competitor_summary && (
+            <div className="p-4 bg-secondary/50 border-l-2 border-l-accent mb-4">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5 font-medium">Competitor Summary</p>
+              <p className="text-sm text-foreground leading-relaxed">{analysis.competitor_summary}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Analysis Cards */}
+        <div className="space-y-4 mb-8">
+          {/* Key Arguments */}
+          {keyArguments.length > 0 && (
+            <CollapsibleSection
+              title={`Key Arguments (${keyArguments.length})`}
+              icon={<RiSwordLine className="w-4 h-4" />}
+              defaultOpen
+            >
+              <ul className="space-y-2">
+                {keyArguments.map((arg, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-foreground">
+                    <RiSwordLine className="w-4 h-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
+                    <span>{arg}</span>
+                  </li>
+                ))}
+              </ul>
+            </CollapsibleSection>
+          )}
+
+          {/* Factual Issues */}
+          {factualIssues.length > 0 && (
+            <CollapsibleSection
+              title={`Factual Issues (${factualIssues.length})`}
+              icon={<RiErrorWarningLine className="w-4 h-4" />}
+              defaultOpen
+            >
+              <div className="bg-red-50/50 border border-red-200/30 p-3">
+                <ul className="space-y-2">
+                  {factualIssues.map((issue, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm text-foreground">
+                      <RiErrorWarningLine className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-600" />
+                      <span>{issue}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </CollapsibleSection>
+          )}
+
+          {/* Rhetorical Strategies */}
+          {rhetoricalStrategies.length > 0 && (
+            <CollapsibleSection
+              title={`Rhetorical Strategies (${rhetoricalStrategies.length})`}
+              icon={<RiEyeLine className="w-4 h-4" />}
+            >
+              <ul className="space-y-2">
+                {rhetoricalStrategies.map((strat, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-foreground">
+                    <RiEyeLine className="w-4 h-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
+                    <span>{strat}</span>
+                  </li>
+                ))}
+              </ul>
+            </CollapsibleSection>
+          )}
+
+          {/* Weaknesses */}
+          {weaknesses.length > 0 && (
+            <CollapsibleSection
+              title={`Weaknesses (${weaknesses.length})`}
+              icon={<RiAlarmWarningLine className="w-4 h-4" />}
+            >
+              <ul className="space-y-2">
+                {weaknesses.map((w, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-foreground">
+                    <RiAlarmWarningLine className="w-4 h-4 mt-0.5 flex-shrink-0 text-amber-600" />
+                    <span>{w}</span>
+                  </li>
+                ))}
+              </ul>
+            </CollapsibleSection>
+          )}
+
+          {/* Valid Points */}
+          {validPoints.length > 0 && (
+            <CollapsibleSection
+              title={`Valid Points to Acknowledge (${validPoints.length})`}
+              icon={<RiCheckboxCircleLine className="w-4 h-4" />}
+            >
+              <div className="bg-green-50/50 border border-green-200/30 p-3">
+                <ul className="space-y-2">
+                  {validPoints.map((vp, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm text-foreground">
+                      <RiCheckboxCircleLine className="w-4 h-4 mt-0.5 flex-shrink-0 text-green-600" />
+                      <span>{vp}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </CollapsibleSection>
+          )}
+        </div>
+
+        {/* Response Section */}
+        <div className="border-t-2 pt-6 mb-8" style={{ borderColor: 'hsl(0, 80%, 45%)' }}>
+          <div className="flex items-center gap-2 mb-4">
+            <RiEditLine className="w-5 h-5" style={{ color: 'hsl(0, 80%, 45%)' }} />
+            <h3 className="font-serif text-lg font-bold text-foreground">Strategic Response</h3>
+          </div>
+
+          {analysis?.response_title && (
+            <h1 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-6 leading-tight" style={{ letterSpacing: '-0.02em' }}>
+              {analysis.response_title}
+            </h1>
+          )}
+
+          {analysis?.response_content && (
+            <div className="mb-6">{renderMarkdown(analysis.response_content)}</div>
+          )}
+
+          {/* Tone Guidance */}
+          {analysis?.tone_guidance && (
+            <div className="p-4 bg-secondary/50 border border-border mb-6">
+              <div className="flex items-center gap-2 mb-1.5">
+                <RiInformationLine className="w-4 h-4 text-muted-foreground" />
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Tone Guidance</p>
+              </div>
+              <p className="text-sm text-foreground leading-relaxed italic">{analysis.tone_guidance}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Strategic Assets */}
+        <div className="space-y-4">
+          {/* Strategic Talking Points */}
+          {talkingPoints.length > 0 && (
+            <CollapsibleSection
+              title={`Strategic Talking Points (${talkingPoints.length})`}
+              icon={<RiLightbulbLine className="w-4 h-4" />}
+              defaultOpen
+            >
+              <ol className="space-y-2">
+                {talkingPoints.map((tp, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-sm text-foreground">
+                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-secondary text-secondary-foreground text-xs font-semibold border border-border">
+                      {idx + 1}
+                    </span>
+                    <span className="pt-0.5">{tp}</span>
+                  </li>
+                ))}
+              </ol>
+            </CollapsibleSection>
+          )}
+
+          {/* SEO Keywords */}
+          {seoKeywords.length > 0 && (
+            <CollapsibleSection
+              title={`SEO Keywords (${seoKeywords.length})`}
+              icon={<RiHashtag className="w-4 h-4" />}
+              defaultOpen
+            >
+              <div className="flex flex-wrap gap-2">
+                {seoKeywords.map((kw, idx) => (
+                  <span key={idx} className="inline-block px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground border border-border">
+                    {kw}
+                  </span>
+                ))}
+              </div>
+            </CollapsibleSection>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
@@ -973,6 +1481,7 @@ function AgentStatus({ activeAgentId }: { activeAgentId: string }) {
   const agents = [
     { id: MANAGER_AGENT_ID, name: 'Content Orchestrator', desc: 'Research, SEO, and content generation' },
     { id: REFINEMENT_AGENT_ID, name: 'Brand Refinement', desc: 'Tone, feedback, and brand alignment' },
+    { id: ANALYSIS_AGENT_ID, name: 'Competitor Analysis', desc: 'Analyze critics and generate responses' },
   ]
 
   return (
@@ -1026,6 +1535,18 @@ export default function Page() {
   const [historySearchQuery, setHistorySearchQuery] = useState('')
   const [mobileInputOpen, setMobileInputOpen] = useState(true)
 
+  // Competitor Analysis state
+  const [analysisFormData, setAnalysisFormData] = useState<AnalysisFormData>({
+    competitorContent: '',
+    competitorSource: '',
+    yourPosition: '',
+    industry: '',
+    responseGoal: '',
+  })
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null)
+  const [analysisError, setAnalysisError] = useState('')
+
   // Load history from localStorage
   useEffect(() => {
     try {
@@ -1063,12 +1584,22 @@ export default function Page() {
         feedbackText: 'Strengthen the opening hook and add more competitive urgency.',
         brandNotes: 'We position ourselves as thought leaders. Use assertive but not aggressive language.',
       })
+      setAnalysisFormData(SAMPLE_ANALYSIS_FORM)
+      setAnalysisResult(SAMPLE_ANALYSIS_RESPONSE)
     } else {
       setFormData({ topic: '', audience: '', tone: '', keyMessages: '', platform: '', wordCount: 1200 })
       setGeneratedContent(null)
       setRefinedContent(null)
       setShowRefinement(false)
       setFeedbackData({ toneAdjustment: '', feedbackText: '', brandNotes: '' })
+      setAnalysisFormData({
+        competitorContent: '',
+        competitorSource: '',
+        yourPosition: '',
+        industry: '',
+        responseGoal: '',
+      })
+      setAnalysisResult(null)
     }
   }, [sampleDataOn])
 
@@ -1148,15 +1679,100 @@ export default function Page() {
     }
   }, [formData, selectedContentType, contentHistory, saveHistory])
 
-  // Refine Content
+  // Analyze Competitor Content
+  const handleAnalyze = useCallback(async () => {
+    if (!analysisFormData.competitorContent.trim()) return
+    setIsAnalyzing(true)
+    setAnalysisError('')
+    setAnalysisResult(null)
+    setActiveAgentId(ANALYSIS_AGENT_ID)
+
+    let message = `Competitor/Critic Content:\n"""\n${analysisFormData.competitorContent}\n"""`
+    if (analysisFormData.competitorSource.trim()) {
+      message += `\n\nSource: ${analysisFormData.competitorSource}`
+    }
+    if (analysisFormData.industry.trim()) {
+      message += `\nIndustry: ${analysisFormData.industry}`
+    }
+    if (analysisFormData.yourPosition.trim()) {
+      message += `\n\nOur Brand's Position: ${analysisFormData.yourPosition}`
+    }
+    if (analysisFormData.responseGoal.trim()) {
+      message += `\n\nResponse Goal: ${analysisFormData.responseGoal}`
+    }
+    message += '\n\nPlease analyze this competitor/critic content thoroughly and generate a strategic professional response.'
+
+    try {
+      const result = await callAIAgent(message, ANALYSIS_AGENT_ID)
+
+      if (result.success) {
+        const parsed = parseLLMJson(result.response)
+        const data = parsed?.result || parsed || result?.response?.result || {}
+
+        const analysisData: AnalysisResponse = {
+          competitor_summary: data?.competitor_summary ?? '',
+          key_arguments: Array.isArray(data?.key_arguments) ? data.key_arguments : [],
+          factual_issues: Array.isArray(data?.factual_issues) ? data.factual_issues : [],
+          rhetorical_strategies: Array.isArray(data?.rhetorical_strategies) ? data.rhetorical_strategies : [],
+          weaknesses: Array.isArray(data?.weaknesses) ? data.weaknesses : [],
+          valid_points: Array.isArray(data?.valid_points) ? data.valid_points : [],
+          threat_level: data?.threat_level ?? '',
+          recommended_response_type: data?.recommended_response_type ?? '',
+          response_title: data?.response_title ?? '',
+          response_content: data?.response_content ?? '',
+          strategic_talking_points: Array.isArray(data?.strategic_talking_points) ? data.strategic_talking_points : [],
+          seo_keywords: Array.isArray(data?.seo_keywords) ? data.seo_keywords : [],
+          tone_guidance: data?.tone_guidance ?? '',
+        }
+
+        setAnalysisResult(analysisData)
+
+        // Save to history
+        const now = new Date()
+        const historyItem: HistoryItem = {
+          id: `${now.getTime()}_${Math.random().toString(36).slice(2, 8)}`,
+          contentType: 'competitor_analysis',
+          topic: analysisFormData.competitorSource || 'Competitor Analysis',
+          generatedAt: now.toLocaleString(),
+          title: analysisData.response_title || 'Competitor Analysis',
+          contentBody: analysisData.response_content || '',
+          seoKeywords: Array.isArray(analysisData.seo_keywords) ? analysisData.seo_keywords : [],
+          formData: { topic: analysisFormData.competitorSource, audience: '', tone: '', keyMessages: '', platform: '', wordCount: 0 },
+        }
+        saveHistory([historyItem, ...contentHistory])
+        setMobileInputOpen(false)
+      } else {
+        setAnalysisError(result?.error ?? 'Analysis failed. Please try again.')
+      }
+    } catch {
+      setAnalysisError('An unexpected error occurred. Please try again.')
+    } finally {
+      setIsAnalyzing(false)
+      setActiveAgentId('')
+    }
+  }, [analysisFormData, contentHistory, saveHistory])
+
+  // Refine Content (works for both standard and analysis results)
   const handleRefine = useCallback(async () => {
-    if (!generatedContent) return
+    // For analysis mode, use analysis response_content
+    const isAnalysisMode = selectedContentType === 'competitor_analysis'
+    if (isAnalysisMode && !analysisResult) return
+    if (!isAnalysisMode && !generatedContent) return
+
     setIsRefining(true)
     setRefineError('')
     setActiveAgentId(REFINEMENT_AGENT_ID)
 
-    const currentBody = showRefinement && refinedContent?.refined_content ? refinedContent.refined_content : generatedContent?.content_body ?? ''
-    const currentTitle = showRefinement && refinedContent?.title ? refinedContent.title : generatedContent?.title ?? ''
+    let currentBody: string
+    let currentTitle: string
+
+    if (isAnalysisMode) {
+      currentBody = showRefinement && refinedContent?.refined_content ? refinedContent.refined_content : analysisResult?.response_content ?? ''
+      currentTitle = showRefinement && refinedContent?.title ? refinedContent.title : analysisResult?.response_title ?? ''
+    } else {
+      currentBody = showRefinement && refinedContent?.refined_content ? refinedContent.refined_content : generatedContent?.content_body ?? ''
+      currentTitle = showRefinement && refinedContent?.title ? refinedContent.title : generatedContent?.title ?? ''
+    }
 
     let message = `Original Content:\nTitle: ${currentTitle}\nContent: ${currentBody}\n\nUser Feedback:`
     if (feedbackData.toneAdjustment) message += `\nTone Adjustment: ${feedbackData.toneAdjustment}`
@@ -1191,24 +1807,54 @@ export default function Page() {
       setIsRefining(false)
       setActiveAgentId('')
     }
-  }, [generatedContent, refinedContent, showRefinement, feedbackData])
+  }, [generatedContent, refinedContent, showRefinement, feedbackData, selectedContentType, analysisResult])
 
   // Copy to clipboard
   const handleCopy = useCallback(async () => {
-    const title = showRefinement && refinedContent?.title ? refinedContent.title : generatedContent?.title ?? ''
-    const body = showRefinement && refinedContent?.refined_content ? refinedContent.refined_content : generatedContent?.content_body ?? ''
+    let title: string
+    let body: string
+
+    if (selectedContentType === 'competitor_analysis' && analysisResult) {
+      title = analysisResult?.response_title ?? ''
+      body = analysisResult?.response_content ?? ''
+    } else {
+      title = showRefinement && refinedContent?.title ? refinedContent.title : generatedContent?.title ?? ''
+      body = showRefinement && refinedContent?.refined_content ? refinedContent.refined_content : generatedContent?.content_body ?? ''
+    }
+
     const text = `${title}\n\n${body}`
     const success = await copyToClipboard(text)
     if (success) {
       setCopySuccess(true)
       setTimeout(() => setCopySuccess(false), 2000)
     }
-  }, [generatedContent, refinedContent, showRefinement])
+  }, [generatedContent, refinedContent, showRefinement, selectedContentType, analysisResult])
+
+  // Copy talking points
+  const handleCopyTalkingPoints = useCallback(async () => {
+    const points = Array.isArray(analysisResult?.strategic_talking_points) ? analysisResult.strategic_talking_points : []
+    if (points.length === 0) return
+    const text = points.map((p, i) => `${i + 1}. ${p}`).join('\n')
+    const success = await copyToClipboard(text)
+    if (success) {
+      setCopySuccess(true)
+      setTimeout(() => setCopySuccess(false), 2000)
+    }
+  }, [analysisResult])
 
   // Export as text
   const handleExport = useCallback(() => {
-    const title = showRefinement && refinedContent?.title ? refinedContent.title : generatedContent?.title ?? ''
-    const body = showRefinement && refinedContent?.refined_content ? refinedContent.refined_content : generatedContent?.content_body ?? ''
+    let title: string
+    let body: string
+
+    if (selectedContentType === 'competitor_analysis' && analysisResult) {
+      title = analysisResult?.response_title ?? ''
+      body = analysisResult?.response_content ?? ''
+    } else {
+      title = showRefinement && refinedContent?.title ? refinedContent.title : generatedContent?.title ?? ''
+      body = showRefinement && refinedContent?.refined_content ? refinedContent.refined_content : generatedContent?.content_body ?? ''
+    }
+
     const text = `${title}\n\n${body}`
     const blob = new Blob([text], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
@@ -1219,7 +1865,7 @@ export default function Page() {
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
-  }, [generatedContent, refinedContent, showRefinement])
+  }, [generatedContent, refinedContent, showRefinement, selectedContentType, analysisResult])
 
   // History actions
   const handleLoadHistoryItem = useCallback((item: HistoryItem) => {
@@ -1229,6 +1875,7 @@ export default function Page() {
     setGeneratedContent(null)
     setRefinedContent(null)
     setShowRefinement(false)
+    setAnalysisResult(null)
   }, [])
 
   const handleDeleteHistoryItem = useCallback(
@@ -1242,6 +1889,11 @@ export default function Page() {
   const handleClearHistory = useCallback(() => {
     saveHistory([])
   }, [saveHistory])
+
+  const isCompetitorMode = selectedContentType === 'competitor_analysis'
+  const hasAnalysisContent = isCompetitorMode && analysisResult !== null
+  const hasStandardContent = !isCompetitorMode && generatedContent !== null
+  const showFeedbackPanel = hasAnalysisContent || hasStandardContent
 
   return (
     <ErrorBoundary>
@@ -1325,19 +1977,32 @@ export default function Page() {
                     <ContentTypeGrid selectedType={selectedContentType} onSelectType={handleSelectType} />
                   </div>
 
-                  <div>
-                    <h3 className="font-serif font-bold text-sm text-foreground uppercase tracking-wider mb-3">Details</h3>
-                    <InputForm
-                      formData={formData}
-                      setFormData={setFormData}
-                      selectedType={selectedContentType}
-                      isGenerating={isGenerating}
-                      onGenerate={handleGenerate}
-                      error={generateError}
-                    />
-                  </div>
+                  {isCompetitorMode ? (
+                    <div>
+                      <h3 className="font-serif font-bold text-sm text-foreground uppercase tracking-wider mb-3">Competitor Analysis</h3>
+                      <CompetitorAnalysisInput
+                        formData={analysisFormData}
+                        setFormData={setAnalysisFormData}
+                        isAnalyzing={isAnalyzing}
+                        onAnalyze={handleAnalyze}
+                        error={analysisError}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <h3 className="font-serif font-bold text-sm text-foreground uppercase tracking-wider mb-3">Details</h3>
+                      <InputForm
+                        formData={formData}
+                        setFormData={setFormData}
+                        selectedType={selectedContentType}
+                        isGenerating={isGenerating}
+                        onGenerate={handleGenerate}
+                        error={generateError}
+                      />
+                    </div>
+                  )}
 
-                  {generatedContent && (
+                  {showFeedbackPanel && (
                     <FeedbackPanel
                       feedbackData={feedbackData}
                       setFeedbackData={setFeedbackData}
@@ -1353,14 +2018,32 @@ export default function Page() {
 
               {/* Output Panel */}
               <div className={`flex-1 flex flex-col bg-background overflow-hidden ${!mobileInputOpen ? 'flex' : 'hidden lg:flex'}`}>
-                <OutputPanel
-                  content={generatedContent}
-                  refinement={refinedContent}
-                  onCopy={handleCopy}
-                  onExport={handleExport}
-                  copySuccess={copySuccess}
-                  showRefinement={showRefinement}
-                />
+                {isCompetitorMode && analysisResult ? (
+                  <AnalysisOutputPanel
+                    analysis={analysisResult}
+                    onCopy={handleCopy}
+                    onExport={handleExport}
+                    onCopyTalkingPoints={handleCopyTalkingPoints}
+                    copySuccess={copySuccess}
+                  />
+                ) : isCompetitorMode && !analysisResult ? (
+                  <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
+                    <RiShieldLine className="w-16 h-16 text-muted-foreground/30 mb-4" />
+                    <h3 className="font-serif text-xl font-bold text-foreground mb-2">Competitor Analysis</h3>
+                    <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
+                      Paste a competitor's article, blog post, or criticism to analyze their arguments, identify weaknesses, and generate a strategic response.
+                    </p>
+                  </div>
+                ) : (
+                  <OutputPanel
+                    content={generatedContent}
+                    refinement={refinedContent}
+                    onCopy={handleCopy}
+                    onExport={handleExport}
+                    copySuccess={copySuccess}
+                    showRefinement={showRefinement}
+                  />
+                )}
               </div>
             </div>
           )}

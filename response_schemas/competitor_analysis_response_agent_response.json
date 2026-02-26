@@ -1,0 +1,66 @@
+{
+  "agent_name": "Competitor Analysis & Response Agent",
+  "agent_id": "69a05fcd54d994465264f055",
+  "description": "Analyzes competitor or critic blog posts, articles, and content to identify key arguments, weaknesses, and opportunities, then generates strategic professional response content that counters criticism and reinforces your brand position",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "competitor_summary": "string",
+    "key_arguments": [
+      "string"
+    ],
+    "factual_issues": [
+      "string"
+    ],
+    "rhetorical_strategies": [
+      "string"
+    ],
+    "weaknesses": [
+      "string"
+    ],
+    "valid_points": [
+      "string"
+    ],
+    "threat_level": "string",
+    "recommended_response_type": "string",
+    "response_title": "string",
+    "response_content": "string",
+    "strategic_talking_points": [
+      "string"
+    ],
+    "seo_keywords": [
+      "string"
+    ],
+    "tone_guidance": "string"
+  },
+  "example_response": {
+    "competitor_summary": "Brief summary of who the competitor/critic is and what their content is about",
+    "key_arguments": [
+      "sample string"
+    ],
+    "factual_issues": [
+      "sample string"
+    ],
+    "rhetorical_strategies": [
+      "sample string"
+    ],
+    "weaknesses": [
+      "sample string"
+    ],
+    "valid_points": [
+      "sample string"
+    ],
+    "threat_level": "Assessment of how much impact this content could have: Low, Medium, High, or Critical",
+    "recommended_response_type": "Recommended type of response: Blog Post, Social Media Thread, Press Statement, Detailed Rebuttal, Thought Leadership Piece, or No Response Needed",
+    "response_title": "Title for the response article/post",
+    "response_content": "Complete ready-to-publish response content with markdown formatting",
+    "strategic_talking_points": [
+      "sample string"
+    ],
+    "seo_keywords": [
+      "sample string"
+    ],
+    "tone_guidance": "Guidance on the overall tone and approach for the response"
+  }
+}
