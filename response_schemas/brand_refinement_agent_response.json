@@ -1,0 +1,36 @@
+{
+  "agent_name": "Brand Refinement Agent",
+  "agent_id": "699ffd466a4eb8f58312ba39",
+  "description": "Rewrites and refines generated content based on user feedback, tone adjustments, and brand alignment notes to produce the final publish-ready version",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "result": {
+      "title": "string",
+      "refined_content": "string",
+      "changes_made": [
+        "string"
+      ],
+      "tone_assessment": "string",
+      "brand_alignment_score": "string",
+      "suggestions": [
+        "string"
+      ]
+    }
+  },
+  "example_response": {
+    "result": {
+      "title": "Refined content title",
+      "refined_content": "The refined/rewritten content with markdown formatting",
+      "changes_made": [
+        "sample string"
+      ],
+      "tone_assessment": "Assessment of the refined tone/voice",
+      "brand_alignment_score": "How well the content now aligns with brand notes",
+      "suggestions": [
+        "sample string"
+      ]
+    }
+  }
+}

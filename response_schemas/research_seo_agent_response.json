@@ -1,0 +1,36 @@
+{
+  "agent_name": "Research & SEO Agent",
+  "agent_id": "699ffd2465de95d6c8adffef",
+  "description": "Performs web research on the given topic, gathers trending keywords, competitive angles, audience insights, and SEO recommendations to inform content creation",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "result": {
+      "keywords": [
+        "string"
+      ],
+      "competitive_analysis": "string",
+      "audience_insights": "string",
+      "seo_recommendations": "string",
+      "research_summary": "string",
+      "suggested_titles": [
+        "string"
+      ]
+    }
+  },
+  "example_response": {
+    "result": {
+      "keywords": [
+        "sample string"
+      ],
+      "competitive_analysis": "Summary of competitive landscape",
+      "audience_insights": "Key audience findings",
+      "seo_recommendations": "Actionable SEO recommendations",
+      "research_summary": "Overall research summary",
+      "suggested_titles": [
+        "sample string"
+      ]
+    }
+  }
+}

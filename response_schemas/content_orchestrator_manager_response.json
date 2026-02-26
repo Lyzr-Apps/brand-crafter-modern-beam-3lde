@@ -1,0 +1,52 @@
+{
+  "agent_name": "Content Orchestrator Manager",
+  "agent_id": "699ffd466a4eb8f58312ba37",
+  "description": "Coordinates between research and writing sub-agents, routes content type requirements, and aggregates the final draft output for user review",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "result": {
+      "content_type": "string",
+      "title": "string",
+      "content_body": "string",
+      "seo_keywords": [
+        "string"
+      ],
+      "research_summary": "string",
+      "competitive_insights": "string",
+      "audience_insights": "string",
+      "meta_description": "string",
+      "key_takeaways": [
+        "string"
+      ],
+      "cta_text": "string",
+      "word_count": "number",
+      "suggested_titles": [
+        "string"
+      ]
+    }
+  },
+  "example_response": {
+    "result": {
+      "content_type": "Type of content generated",
+      "title": "Content title/headline",
+      "content_body": "The full content draft with markdown formatting",
+      "seo_keywords": [
+        "sample string"
+      ],
+      "research_summary": "Summary of research findings",
+      "competitive_insights": "Key competitive insights",
+      "audience_insights": "Audience-related findings",
+      "meta_description": "SEO meta description",
+      "key_takeaways": [
+        "sample string"
+      ],
+      "cta_text": "Call-to-action text",
+      "word_count": 0,
+      "suggested_titles": [
+        "sample string"
+      ]
+    }
+  }
+}

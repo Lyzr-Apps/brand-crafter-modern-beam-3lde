@@ -1,0 +1,34 @@
+{
+  "agent_name": "Content Writer Agent",
+  "agent_id": "699ffd250d9e537d821193c1",
+  "description": "Generates complete content drafts (blog posts, social media, emails, ad copy, video scripts, case studies) using research data, user-specified tone, and brand context",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "result": {
+      "content_type": "string",
+      "title": "string",
+      "content_body": "string",
+      "meta_description": "string",
+      "key_takeaways": [
+        "string"
+      ],
+      "cta_text": "string",
+      "word_count": "number"
+    }
+  },
+  "example_response": {
+    "result": {
+      "content_type": "Type of content generated",
+      "title": "Content title/headline",
+      "content_body": "The full content draft with markdown formatting",
+      "meta_description": "SEO meta description",
+      "key_takeaways": [
+        "sample string"
+      ],
+      "cta_text": "Call-to-action text",
+      "word_count": 0
+    }
+  }
+}
